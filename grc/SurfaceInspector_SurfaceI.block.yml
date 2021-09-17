@@ -1,0 +1,86 @@
+id: SurfaceInspector_SurfaceI
+label: Surface Plot
+category: '[Channel Sounding OOT]'
+
+templates:
+  imports: |-
+    import SurfaceInspector
+    from PyQt5 import Qt
+    from gnuradio import qtgui
+    import sip
+
+
+  make: |-
+    <%
+        win = 'self._%s_win'%id
+    %>\
+    SurfaceInspector.SurfaceI(${samp_rate}, ${vlen},${width},${height},${gwidth},${gheight},${maxz},${fps},${xaxis},${yaxis},${zaxis})
+    ${win} = sip.wrapinstance(self.${id}.pyqwidget(), Qt.QWidget)
+
+
+#  Make one 'parameters' list entry for every parameter you want settable from the GUI.
+#     Keys include:
+#     * id (makes the value accessible as \$keyname, e.g. in the make entry)
+#     * label (label shown in the GUI)
+#     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+
+#- id: gui_hint
+#  label: GUI Hint
+#  dtype: gui_hint
+#  default: ''
+parameters:
+- id: samp_rate
+  label: Sampling Rate
+  dtype: float
+- id: vlen
+  label: Vector Length
+  dtype: int
+- id: width
+  label: Number of Samples in Time Axis
+  dtype: int
+- id: height
+  label: Number of Samples in Delay Axis
+  dtype: int
+- id: gwidth
+  label: Graph Width
+  dtype: int
+- id: gheight
+  label: Graph Height
+  dtype: int
+- id: maxz
+  label: Maximum Magnitude
+  dtype: float
+  default: '0'
+- id: fps
+  label: FPS
+  dtype: int
+  default: '1024'
+- id: xaxis
+  label: X Axis
+  dtype: string
+- id: yaxis
+  label: Y Axis
+  dtype: string
+- id: zaxis
+  label: Z Axis
+  dtype: string
+
+
+#  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
+#  Keys include:
+#      * label (an identifier for the GUI)
+#      * domain (optional - stream or message. Default is stream)
+#      * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+#      * vlen (optional - data stream vector length. Default is 1)
+#      * optional (optional - set to 1 for optional inputs. Default is 0)
+inputs:
+- label: in
+  domain: stream
+  dtype: float
+  vlen: ${vlen}
+
+
+
+#  'file_format' specifies the version of the GRC yml format used in the file
+#  and should usually not be changed.
+file_format: 1
